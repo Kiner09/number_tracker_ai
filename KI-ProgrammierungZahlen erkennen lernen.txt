@@ -1,0 +1,145 @@
+Hallo! Super, dass ihr euch für KI interessiert. Eine KI zu bauen, die Zahlen erkennt, ist ein klassisches Einstiegsprojekt und perfekt, um die Grundlagen zu lernen. Keine Sorge, wir gehen das ganz langsam Schritt für Schritt durch. Stellt euch das Ganze vor wie Kochen nach Rezept – wir brauchen Zutaten (Daten), Werkzeuge (Software) und eine Anleitung (die Schritte hier).
+Das Ziel: Wir wollen einem Computer beibringen, handgeschriebene Ziffern (0 bis 9) auf Bildern zu erkennen.
+Die Methode: Wir benutzen dazu ein sogenanntes Neuronales Netz. Das ist eine Art "Gehirn" für den Computer, inspiriert davon, wie unser eigenes Gehirn lernt. Wir werden dieses Netz mit vielen Beispielen trainieren.
+Was wir brauchen (die "Werkzeuge"):
+Programmiersprache: Wir benutzen Python. Es ist relativ einfach zu lernen und die wichtigste Sprache für KI.
+KI-Bibliotheken: Das sind vorgefertigte Werkzeugkästen, die uns viel Arbeit abnehmen. Die wichtigsten sind:
+TensorFlow oder PyTorch: Das sind die "Motoren" für unsere KI. Wir nehmen hier als Beispiel TensorFlow mit Keras. Keras ist eine Art benutzerfreundliche Oberfläche für TensorFlow, super für Anfänger.
+NumPy: Ein Werkzeug, um effizient mit Zahlen (besonders Listen oder Tabellen von Zahlen, die unsere Bilder darstellen) zu arbeiten.
+Matplotlib: Um uns die Zahlenbilder und Ergebnisse anzuschauen.
+Los geht's – Schritt für Schritt:
+Schritt 1: Umgebung einrichten
+Python installieren: Falls ihr es noch nicht habt, ladet Python von python.org herunter und installiert es. Achtet darauf, dass ihr beim Installieren "Add Python to PATH" ankreuzt.
+Bibliotheken installieren: Öffnet eure Kommandozeile oder euer Terminal und gebt diese Befehle nacheinander ein (nach jedem Befehl Enter drücken):
+pip install tensorflow
+pip install numpy
+pip install matplotlib
+Use code with caution.
+Bash
+pip ist der Paketmanager von Python, der die Bibliotheken für euch herunterlädt und installiert.
+Editor wählen: Ihr könnt einen einfachen Texteditor benutzen, aber besser ist eine Entwicklungsumgebung (IDE) wie VS Code oder Thonny, oder noch besser für den Anfang: Jupyter Notebooks. Jupyter erlaubt euch, Code in kleinen Blöcken auszuführen und die Ergebnisse direkt darunter zu sehen – perfekt zum Experimentieren. Ihr könnt Jupyter mit pip install notebook installieren und dann mit jupyter notebook im Terminal starten.
+Schritt 2: Die Daten besorgen und vorbereiten (Die "Zutaten")
+Eine KI lernt aus Beispielen. Wir brauchen also viele Bilder von handgeschriebenen Ziffern, bei denen wir auch wissen, welche Ziffer es ist.
+Zum Glück gibt es einen berühmten Datensatz dafür: MNIST. Er enthält 70.000 kleine Schwarz-Weiß-Bilder (28x28 Pixel) von handgeschriebenen Ziffern, inklusive der korrekten "Etiketten" (Labels), also der Ziffern 0-9.
+Das Tolle: TensorFlow/Keras kann diesen Datensatz für uns automatisch herunterladen!
+# Importiere die nötigen Werkzeuge
+import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Lade den MNIST-Datensatz
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+
+# x_train enthält 60.000 Trainingsbilder
+# y_train enthält die 60.000 zugehörigen Labels (0-9)
+# x_test enthält 10.000 Testbilder (zum späteren Überprüfen)
+# y_test enthält die 10.000 zugehörigen Test-Labels
+Use code with caution.
+Python
+Daten anschauen: Schauen wir uns mal ein Beispiel an:
+# Zeige das erste Bild aus dem Trainingsdatensatz
+plt.imshow(x_train[0], cmap='gray') # cmap='gray' für Schwarz-Weiß
+plt.title(f"Dieses Bild zeigt die Ziffer: {y_train[0]}")
+plt.show()
+Use code with caution.
+Python
+Daten vorbereiten (Normalisierung): Computer verstehen Bilder als Zahlen (die Helligkeit jedes Pixels, hier von 0 bis 255). Für Neuronale Netze ist es oft besser, wenn diese Zahlen klein sind, z.B. zwischen 0 und 1. Wir teilen daher alle Pixelwerte durch 255.
+# Wandle die Pixelwerte von 0-255 in 0-1 um
+x_train = x_train / 255.0
+x_test = x_test / 255.0
+Use code with caution.
+Python
+Schritt 3: Das "Gehirn" bauen (Das Modell definieren)
+Wir bauen jetzt unser Neuronales Netz. Stellt es euch wie Schichten von "Neuronen" vor, die Informationen verarbeiten.
+Mit Keras geht das recht einfach. Wir bauen ein sequentielles Modell, das heißt, die Schichten folgen einfach aufeinander.
+# Baue das Modell Schicht für Schicht
+model = tf.keras.models.Sequential([
+  # 1. Schicht: "Flatten" - Macht aus dem 28x28 Bild eine flache Liste von 784 Pixeln
+  tf.keras.layers.Flatten(input_shape=(28, 28)),
+
+  # 2. Schicht: "Dense" - Eine voll vernetzte Schicht mit 128 Neuronen
+  # 'relu' ist eine Aktivierungsfunktion - hilft dem Netz, komplexe Muster zu lernen
+  tf.keras.layers.Dense(128, activation='relu'),
+
+  # 3. Schicht: "Dropout" - Eine Technik, um Überanpassung zu vermeiden (optional, aber gut)
+  # Schaltet zufällig Neuronen während des Trainings aus
+  tf.keras.layers.Dropout(0.2),
+
+  # 4. Schicht: "Dense" - Die Ausgabeschicht. Sie muss 10 Neuronen haben (für Ziffern 0-9).
+  # 'softmax' sorgt dafür, dass die Ausgabe Wahrscheinlichkeiten sind (z.B. 80% sicher, dass es eine 7 ist)
+  tf.keras.layers.Dense(10, activation='softmax')
+])
+Use code with caution.
+Python
+Input-Schicht (Flatten): Nimmt das 28x28 Bild und macht eine lange Kette von 784 Zahlen daraus.
+Versteckte Schicht (Dense, relu): Hier findet die eigentliche "Magie" statt. Die 128 Neuronen lernen, wichtige Merkmale in den Pixeln zu erkennen.
+Output-Schicht (Dense, softmax): Gibt für jede der 10 Ziffern eine Wahrscheinlichkeit aus. Die höchste Wahrscheinlichkeit ist die Vorhersage des Modells.
+Schritt 4: Das Modell trainieren (Der Lernprozess)
+Jetzt müssen wir dem Modell sagen, wie es lernen soll und dann das Training starten.
+Kompilieren: Wir legen fest:
+optimizer: Die Methode, wie das Netz seine internen Verbindungen anpasst, um besser zu werden (z.B. adam).
+loss: Eine Funktion, die misst, wie falsch die Vorhersagen des Netzes sind (z.B. sparse_categorical_crossentropy für Klassifizierungsprobleme wie unseres). Das Ziel ist, diesen "Fehler" zu minimieren.
+metrics: Was wir während des Trainings beobachten wollen (z.B. accuracy - die Genauigkeit, also wie oft das Netz richtig liegt).
+# Kompiliere das Modell
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+Use code with caution.
+Python
+Trainieren (fit): Wir zeigen dem Modell die Trainingsbilder (x_train) und die richtigen Antworten (y_train) immer wieder.
+epochs: Wie oft das Modell den gesamten Trainingsdatensatz durchläuft. 5 Durchläufe sind für den Anfang oft ausreichend.
+# Trainiere das Modell
+print("Starte das Training...")
+history = model.fit(x_train, y_train, epochs=5)
+print("Training abgeschlossen!")
+
+# history enthält Informationen über den Trainingsverlauf (z.B. Genauigkeit pro Epoche)
+Use code with caution.
+Python
+Ihr werdet sehen, wie die Genauigkeit (accuracy) mit jeder Epoche steigt!
+Schritt 5: Das Modell bewerten (Wie gut ist es wirklich?)
+Das Modell hat jetzt auf den Trainingsdaten gelernt. Aber kann es auch Ziffern erkennen, die es noch nie gesehen hat? Dafür haben wir die Testdaten (x_test, y_test).
+# Bewerte das Modell mit den Testdaten
+print("Bewerte das Modell...")
+test_loss, test_acc = model.evaluate(x_test, y_test, verbose=2)
+print(f"\nGenauigkeit auf den Testdaten: {test_acc*100:.2f}%")
+Use code with caution.
+Python
+Eine Genauigkeit von über 95% ist hier schon sehr gut für so ein einfaches Modell!
+Schritt 6: Das Modell benutzen (Vorhersagen machen)
+Jetzt können wir unser trainiertes Modell verwenden, um neue (oder Test-) Bilder zu klassifizieren.
+# Mache Vorhersagen für die Testbilder
+predictions = model.predict(x_test)
+
+# 'predictions' ist eine Liste. Jedes Element darin enthält 10 Wahrscheinlichkeiten.
+# Schauen wir uns die Vorhersage für das erste Testbild an:
+print("Vorhersage-Wahrscheinlichkeiten für das erste Testbild:", predictions[0])
+
+# Welche Ziffer hat die höchste Wahrscheinlichkeit?
+predicted_digit = np.argmax(predictions[0])
+print("Vorhergesagte Ziffer:", predicted_digit)
+
+# Was war die tatsächliche Ziffer?
+actual_digit = y_test[0]
+print("Tatsächliche Ziffer:", actual_digit)
+
+# Zeigen wir das Bild dazu an
+plt.imshow(x_test[0], cmap='gray')
+plt.title(f"Vorhersage: {predicted_digit}, Richtig: {actual_digit}")
+plt.show()
+Use code with caution.
+Python
+Zusammenfassung:
+Einrichten: Python & Bibliotheken (TensorFlow, NumPy, Matplotlib) installieren.
+Daten laden & vorbereiten: MNIST-Datensatz laden, Bilder anschauen, Pixelwerte normalisieren (0-1).
+Modell bauen: Ein sequentielles Neuronales Netz mit Keras definieren (Flatten -> Dense -> Dense).
+Modell trainieren: Modell kompilieren (Optimizer, Loss, Metrik festlegen) und mit fit() auf Trainingsdaten trainieren.
+Modell bewerten: Mit evaluate() die Genauigkeit auf ungesehenen Testdaten prüfen.
+Modell benutzen: Mit predict() Vorhersagen für neue Bilder machen.
+Was kommt danach?
+Das war jetzt ein Schnelldurchlauf. Das Wichtigste ist, dass ihr die grundlegende Idee verstanden habt: Daten -> Modell -> Training -> Bewertung -> Vorhersage.
+Experimentiert! Ändert die Anzahl der Neuronen in der Dense-Schicht, fügt mehr Schichten hinzu, trainiert länger (mehr epochs). Schaut, wie sich die Genauigkeit verändert.
+Sucht nach Tutorials: Sucht online nach "TensorFlow Keras MNIST tutorial". Dort findet ihr oft noch detailliertere Erklärungen und Code.
+Verstehen: Versucht, die einzelnen Code-Zeilen nachzuvollziehen. Was macht jede Funktion?
+Nicht entmutigen lassen: Am Anfang wirkt vieles komplex. Kopiert Code, führt ihn aus, verändert ihn und beobachtet, was passiert. Das ist der beste Weg zu lernen!
+Viel Spaß beim Ausprobieren und willkommen in der spannenden Welt der KI!

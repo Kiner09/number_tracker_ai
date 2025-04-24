@@ -1,4 +1,4 @@
-Hallo! Super, dass ihr euch für KI interessiert. Eine KI zu bauen, die Zahlen erkennt, ist ein klassisches Einstiegsprojekt und perfekt, um die Grundlagen zu lernen. Keine Sorge, wir gehen das ganz langsam Schritt für Schritt durch. Stellt euch das Ganze vor wie Kochen nach Rezept – wir brauchen Zutaten (Daten), Werkzeuge (Software) und eine Anleitung (die Schritte hier).
+Ananans Hallo! Super, dass ihr euch für KI interessiert. Eine KI zu bauen, die Zahlen erkennt, ist ein klassisches Einstiegsprojekt und perfekt, um die Grundlagen zu lernen. Keine Sorge, wir gehen das ganz langsam Schritt für Schritt durch. Stellt euch das Ganze vor wie Kochen nach Rezept – wir brauchen Zutaten (Daten), Werkzeuge (Software) und eine Anleitung (die Schritte hier).
 Das Ziel: Wir wollen einem Computer beibringen, handgeschriebene Ziffern (0 bis 9) auf Bildern zu erkennen.
 Die Methode: Wir benutzen dazu ein sogenanntes Neuronales Netz. Das ist eine Art "Gehirn" für den Computer, inspiriert davon, wie unser eigenes Gehirn lernt. Wir werden dieses Netz mit vielen Beispielen trainieren.
 Was wir brauchen (die "Werkzeuge"):

@@ -2,6 +2,8 @@
 
 
 import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Input, Flatten, Dense, Dropout
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -11,23 +13,21 @@ import matplotlib.pyplot as plt
 x_train = x_train / 255.0
 x_test = x_test / 255.0
 
-# Baue das Modell Schicht für Schicht
-model = tf.keras.models.Sequential([
-  # 1. Schicht: "Flatten" - Macht aus dem 28x28 Bild eine flache Liste von 784 Pixeln
-  tf.keras.layers.Flatten(input_shape=(28, 28)),
+input_shape = (28, 28)
+print(f"\n1. Erwartete Form der Eingabedaten (ein Bild): {input_shape}")
 
-  # 2. Schicht: "Dense" - Eine voll vernetzte Schicht mit 128 Neuronen
-  # 'relu' ist eine Aktivierungsfunktion - hilft dem Netz, komplexe Muster zu lernen
-  tf.keras.layers.Dense(128, activation='relu'),
+print("\n2. Erstelle einen leeren 'Sequential'-Behälter für die Schichten.")
+model = Sequential(name="Zeichencheck") # Geben wir ihm einen Namen
+print(f"   Leeres Modell '{model.name}' wurde erstellt.")
 
-  # 3. Schicht: "Dropout" - Eine Technik, um Überanpassung zu vermeiden (optional, aber gut)
-  # Schaltet zufällig Neuronen während des Trainings aus
-  tf.keras.layers.Dropout(0.2),
+print(f"\n3. Füge die 'Flatten'-Schicht hinzu.")
+print(f"   Zweck: Wandelt die 2D-Bildstruktur {input_shape} in eine 1D-Liste um.")
+# Wir berechnen die resultierende Länge: 28 * 28 = 784
+flattened_size = np.prod(input_shape)
 
-  # 4. Schicht: "Dense" - Die Ausgabeschicht. Sie muss 10 Neuronen haben (für Ziffern 0-9).
-  # 'softmax' sorgt dafür, dass die Ausgabe Wahrscheinlichkeiten sind (z.B. 80% sicher, dass es eine 7 ist)
-  tf.keras.layers.Dense(10, activation='softmax')
-])
+model.add(Input(shape=input_shape, name="Eingabe_Schicht")) # Gib der Schicht einen Namen
+print(f"   'Input'-Schicht hinzugefügt. Erwartete Eingabeform: (None, {input_shape[0]}, {input_shape[1]})")
+print(model, "ajsdaklsd")
+print(f"   'Flatten'-Schicht hinzugefügt. Aktuelle Datenform im Modell: (None, {flattened_size})")
 
-print(model)
 print("Hello World")

@@ -67,7 +67,7 @@ def vorhersage_eigenes_bild(bild_pfad, model_zum_testen):
         img_resized_cv = cv2.resize(img_cv, (28, 28), interpolation=cv2.INTER_AREA)
         # WICHTIG: Vorverarbeitung anpassen!
         # Beispiel: WENN deine Bilder schwarze Ziffern auf weißem Grund haben:
-        # img_resized_cv = 255 - img_resized_cv
+        img_resized_cv = 255 - img_resized_cv
         img_normalized = img_resized_cv / 255.0
         img_batch = np.expand_dims(img_normalized, axis=0)
         prediction_probabilities = model_zum_testen.predict(img_batch)
